@@ -340,6 +340,18 @@ If you already know the archetype you want to use, you can provide all the infor
 
 # Part 3: Building Projects with Maven
 
+Once you've created a project or checked one out from version control you're likely going to want to build your project - you want to turn your code into a JAR, WAR or other type of package. The type of artifact your project generates is defined by the `<packaging>` element in you `pom.xml`. If the element isn't supplied Maven defaults to `jar` for the value. Other allowed values are `war`, `ear`, `rar`, `par`, `pom`, `maven-plugin`, and `ejb`.
+
+In order to build projects, Maven uses a concept know as a Build Lifecycle. Maven has three built-in Build Lifecycles:
+
+* clean - handles cleaning up projects
+* default (also know as build) - handles the compilation, testing, packaging and deployment of your project
+* site - handles project site generation and site deployment
+
+![Figure 1: Lifecycle Phases](lifecycle-phases.png "Lifecycle Phases")
+
+A Build Lifecycle consists of a list of ordered Phases.Each Phase is associated with a set of Goals. The Goals associated with each Phase are determined by the type of Packaging your project uses.
+
 A Life Cycle consists of Phases. Phases are execute in order to complete the lifecycle. Goals represent specific tasks and are bound to 0 or more phases. Goals that aren't bound to a phase can be executed directly.
 
 There are three built-in lifecycles for Maven:
@@ -452,7 +464,7 @@ Once you've set up your own repository or have found another one you want to use
 
 These various repositories are shown in the diagram below.
 
-![Figure 1: Maven Repositories](repositories.png "Maven Repositories")
+![Figure 2: Maven Repositories](repositories.png "Maven Repositories")
 
 <!-- PAGE BREAK -->
 
