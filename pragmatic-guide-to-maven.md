@@ -340,26 +340,25 @@ If you already know the archetype you want to use, you can provide all the infor
 
 # Part 3: Building Projects with Maven
 
-Once you've created a project or checked one out from version control you're likely going to want to build your project - you want to turn your code into a JAR, WAR or other type of package. The type of artifact your project generates is defined by the `<packaging>` element in you `pom.xml`. If the element isn't supplied Maven defaults to `jar` for the value. Other allowed values are `war`, `ear`, `rar`, `par`, `pom`, `maven-plugin`, and `ejb`.
+Once you've created your project (or checked one out from version control) you're likely going to want to build your project. You want to turn your source code and resources into a JAR, WAR or other type of package.
 
-In order to build projects, Maven uses a concept know as a Build Lifecycle. Maven has three built-in Build Lifecycles:
+The type of artifact your project generates is defined by the `<packaging>` element in you `pom.xml`. If the element isn't supplied Maven defaults to `jar` for the value. Other possible values are `war`, `ear`, `rar`, `par`, `pom`, `maven-plugin`, and `ejb`.
 
-* clean - handles cleaning up projects
-* default (also know as build) - handles the compilation, testing, packaging and deployment of your project
-* site - handles project site generation and site deployment
+To orchestrate the building of a project, Maven uses a concept know as a Build Lifecycle. Maven has three built-in Build Lifecycles:
+
+* clean - performs project cleanup
+* default - performs compilation, testing, packaging, installation and deployment of your project
+* site - performs site generation and deployment
+
+Each Build Lifecycle consists of a list of ordered Phases. The phases for the lifecycles listed above are shown in Figure 1. Each Phase is associated with a set of Goals and, as described previously, Goals are provided by Maven Plugins. The Goals associated with each Phase are determined by the type of Packaging your project uses.
+
+When you pass a phase to the `mvn` command, such as `mvn compile` from the default lifecycle, Maven will work from the starting phase of that lifecycle up to the phase you requested. So running the `compile` phase will run `validate`, `initialize`, `generate-sources`, `process-sources`, `generate-resources`, `process-resources` and then finally `compile`.
+
+You can request multiple phases or goals be preformed by separating them on the command-line with a space. Maven will process them in the order provided.
+
+By using the help plugin to describe a Phase, you can see which Plugin Goals are associated with each Phase. They will be in the form `groupId:artifactId:goal`
 
 ![Figure 1: Lifecycle Phases](lifecycle-phases.png "Lifecycle Phases")
-
-A Build Lifecycle consists of a list of ordered Phases.Each Phase is associated with a set of Goals. The Goals associated with each Phase are determined by the type of Packaging your project uses.
-
-A Life Cycle consists of Phases. Phases are execute in order to complete the lifecycle. Goals represent specific tasks and are bound to 0 or more phases. Goals that aren't bound to a phase can be executed directly.
-
-There are three built-in lifecycles for Maven:
-- default: manages the build and deployment of your project
-- clean: handles project cleaning
-- site: creates site documentation for your project
-	
-To execute all the phases in a lifecycle you only need to call the last one. Maven will perform every phases before the one you request and then the one you requested.
 
 You can provide multiple goals/phases on the command line:
     mvn clean test
@@ -368,10 +367,17 @@ You can provide multiple goals/phases on the command line:
 
 <!-- PAGE BREAK -->
 
-
-## Task X: Build a Project
+## Task X: Building a Project
 
 <!-- PAGE BREAK -->
+
+### Compile your project
+
+	mvn compile
+
+### Clean and then compile your project
+
+	mvn clean compile
 
 <!-- PAGE BREAK -->
 
