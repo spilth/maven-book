@@ -62,6 +62,10 @@ TK
 
 Maven is powered by a number of Java classes and, thusly, relies on Java being installed. Beyond that, the majority of what it needs to run it will download itself. The installation consists of downloading an archive and extracting it to the location of your choice. You set up a few environment variables, put Maven's `bin` directory on your execution path and you're good to go.
 
+Within the `bin` directory is the `mvn` command which is the main way you kick off Maven processes. It provides basic command-line help through the `-h` command-line option and more detailed help through a dedicated `help` plugin.
+
+General user-specific configuration is managed in a `settings.xml` file located in the `~/.m2/` directory. Local system-wide defaults are located in a `settings.xml` located in `$M2_HOME/conf`.
+
 <!-- PAGE BREAK -->
 
 <!-- PAGE BREAK -->
@@ -287,6 +291,8 @@ Wether creating a project manually or automatically you will need to decide on a
 
 The simplest way to create a Maven project is to create a new directory and create a `pom.xml` inside of it. Once you've determined the dependencies and plugins you want to use, you'd add them to the POM.
 
+Since Maven is all about convention over configuration, it provides a lot of default settings for you. All projets extend from a Super POM provided by Maven which sets sane and standard defaults. The combination of your project's POM along with the Super POM combine to form an Effective POM. You can view this POM by , using the `effective-pom` goal from the `help` plugin.
+
 <!-- PAGE BREAK -->
 
 ### Create a Simple Maven Project
@@ -305,7 +311,7 @@ In your new `hello` directory create the file `pom.xml` with the following conte
       <version>1.0.-SNAPSHOT</version>
     </project>
 
-To view the effective POM (or "super POM") for your project, use the `effective-pom` goal from the `help` plugin:
+To view the effective POM (or "super POM") for a project:
 
     prompt> mvn help:effective-pom
 	...
@@ -446,14 +452,6 @@ You can provide multiple goals/phases on the command line:
 
 <!-- PAGE BREAK -->
 
-## Task X: Viewing a Project's Effective POM
-
-<!-- PAGE BREAK -->
-
-    mvn help:effetive-pom
-
-<!-- PAGE BREAK -->
-
 # Part X: Version Control for Maven Project
 
 TK
@@ -507,15 +505,13 @@ To import a Maven project into Subversion, do this:
 
 # Part X: Maven Repositories
 
-Repositories are where Maven looks to get plugins and dependencies from.
+If you've been paying attention to Maven's output you've probably noticed it doing a lot of downloading the first time you use a phase or goal. It may have noticed the URL `http://repo1.maven.org/` showing up a lot too. And you may have also noticed that Maven doesn't download anything the next time you use that same phase or goal. What's going on here?
 
-The first place Maven looks is in your Local Repository. By default this is in the directory `~/.m2/repository`.
+The installation of Maven is very small. The first time you use a phase or goal, Maven will download the artifact for the plugin that provides the goal in question. It stores that artifact locally (in ~/.m2/repository by default) for future retrieval. The default place Maven looks to download artifacts from is the Maven Central repository located at `http://repo1.maven.org`. This is also where it will try to retrieve any dependencies from.
 
-If you haven't set up your own repository (which we haven't, yet) the next place Maven will look is the Central Maven Repository. This is located at ???. If Maven finds the artifact there it will download it and put it in your Local Repository for future usage.
+You can configure projects to look in additional Repositories including 3rd Parties or your own company repository.  You can also set your company's repository up as a caching proxy to the Central Maven Repository so that if it ever becomes unavailable (due to their server issues or your own internet connectivity issues), your developers can continue to work as normal.
 
-Once you've set up your own repository or have found another one you want to use, you'll configure Maven to search those repositories for all or a subset of artifacts.
-
-These various repositories are shown in the diagram below.
+The various types of repositories mentioned above are shown in the diagram below.
 
 ![Figure 3: Maven Repositories](repositories.png "Maven Repositories")
 
@@ -523,7 +519,7 @@ These various repositories are shown in the diagram below.
 
 <!-- PAGE BREAK -->
 
-## Task X: Using a Repository Mirror
+## Task X: Configuring Additional Repositories
 
 <!-- PAGE BREAK -->
 
@@ -575,12 +571,6 @@ To start up Archiva:
 	wrapper  | Launching a JVM...
 
 You should now be able to access Archiva via `http://localhost:8080/archiva`. Supply a full name, email address and password for the `admin` user and you should be set.
-
-<!-- PAGE BREAK -->
-
-## Task X: Installing and Running Archiva as a Tomcat Application
-
-<!-- PAGE BREAK -->
 
 <!-- PAGE BREAK -->
 
