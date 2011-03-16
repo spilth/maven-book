@@ -30,7 +30,7 @@ TK
 
 ## What Version of Maven to Use
 
-Maven 2.2.1
+Maven 3.0.3
  
 ## How Maven Works
 
@@ -68,7 +68,7 @@ Maven is powered by a number of Java classes and, thusly, relies on Java being i
 
 ## Task 1: Installing Maven
 
-Maven can be downloaded from http://maven.apache.org/download.html. Currently there are two major versions of Maven that are supported: 2.X and 3.X. In this book we'll be using 2.2.1.
+Maven can be downloaded from http://maven.apache.org/download.html. Currently there are two major versions of Maven that are supported: 2.X and 3.X. In this book we'll be using 3.0.3.
 
 Maven requires its main script `mvn` being in your execution path, an environment variable named `M2_HOME` that points to where you installed Maven and the environment variable `JAVA_HOME` which should point to your Java installation. Maven 2.2.1 requires Java 1.4 or higher and Maven 3.X requires Java ?.?.?. It is suggested you use Java 5 or 6.
 
@@ -76,26 +76,22 @@ Maven requires its main script `mvn` being in your execution path, an environmen
 
 ### Install Maven 2.2.1 on OS X
 
-After downloading Maven 2.2.1 from http://maven.apache.org/download.html
+After downloading Maven 3.0.3 from http://maven.apache.org/download.html
 
-    tar -zxvf apache-maven-2.2.1.tar.gz
-    mv apache-maven-2.2.1 /Users/brian/Applications/
+    tar -zxvf apache-maven-3.0.3.tar.gz
+    mv apache-maven-3.0.3 /Users/brian/Applications/
 
 Then edit `~/.profile` and add the following:
     
     export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
-    export M2_HOME=/Users/brian/Applications/apache-maven-2.2.1
+    export M2_HOME=/Users/brian/Applications/apache-maven-3.0.3
     export PATH=$PATH:$M2_HOME/bin
 
 Once you're done editing you can run the following command to immediately execute your profile updates:
 
     source ~/.profile
 
-To install Maven using MacPorts, do this:
-
-    sudo port install maven
-
-### Install Maven 2.2.1 on Ubuntu
+### Install Maven 3.0.3 on Ubuntu
 
 Manually installation of Maven on Ubuntu is similar to the Mac OS X process.
 
@@ -103,7 +99,7 @@ To install Maven using Ubuntu's package manager:
 
     ???apt-get install maven???
 
-### Install Maven 2.2.1 on Windows
+### Install Maven 3.0.3 on Windows
 
 TK
 
@@ -124,8 +120,11 @@ To get a detailed description on the goals listed by `help:help`, set the `goal`
 ### Display the version of Maven you're using
 
     prompt> mvn -v
-	Apache Maven 2.2.1 (r801777; 2009-08-06 15:16:01-0400)
-	...
+	Apache Maven 3.0.3 (r1075438; 2011-02-28 12:31:09-0500)
+	Maven home: /Users/brian/Applications/apache-maven-3.0.3
+	Java version: 1.6.0_22, vendor: Apple Inc.
+	Java home: /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+	...etc...
 	
 ### Display command-line options for Maven
 
@@ -135,7 +134,7 @@ To get a detailed description on the goals listed by `help:help`, set the `goal`
 	Options:
 	 -am,--also-make ...	
      -amd,--also-make-dependents ...
-	...
+	...etc...
 
 ### Get information about the help plugin
 
@@ -249,14 +248,36 @@ Edit `~/.m2/settings.xml` and add the following:
 Put the following in `~/.m2/settings.xml`:
 
     <settings>
-      <localRepository>/Users/brian/maven/repositories/maven2/</localRepository>
+      <localRepository>
+		/Users/brian/maven/repositories/maven2/
+	  </localRepository>
     </settings>
 
 <!-- PAGE BREAK -->
 
 # Part 2: Creating Maven Projects
 
-TK
+The defining piece of a Maven project is its definition in `pom.xml`. This file provides Maven with all the information it needs to build your project.
+
+Maven uses a small set of values to identify projects. You will need these for every Maven project you create and every Plugin and Dependency you use will have them as well.
+
+The 3 required properties are:
+
+* `groupId`: This represents the group this project belongs to. This is generally a reverse domain name like most Java packages use. This value will likely not change over the course of your project's development. Ex: `com.example`
+* `aritfactId`: This is the name of your project. This needs to be unique within the groupId you provided. This value will also not change over time. Ex: `helloworld`
+* `version`: Represents the version of your application and usually done in an X.Y.Z type format. Version will change over time if your project goes through several releases and updates. You will also often see the word SNAPSHOT in the version property. This is explained below.
+
+Additionally, you must define the version number of Maven's Project Object Model that you want to use. This lets Maven know how to parse your pom.xml. For our examples this property, `modelVersion`, will always be `4.0.0`.
+
+Wether creating a project manually or automatically you will need to decide on a value for these properties. Here's what we'll be using to start:
+
+* groupId = com.example
+* artifactId = hello
+* version = 1.0.0-SNAPSHOT
+* modelVersion = 4.0.0
+
+
+### Snapshot versus Release
 
 <!-- PAGE BREAK -->
 
@@ -264,28 +285,18 @@ TK
 
 ## Task 5: Creating a Maven Project Manually
 
-Maven uses a small set of values to identify projects. You will need these for every Maven project you create and every Plugin and Dependency you use will have them as well.
-
-The 3 required properties are:
-
-* `groupId`: This represents the group this project belongs to. This is generally a reverse domain name like Java packages use. This value will not change over the course of your project's development. Ex: `com.example`
-* `aritfactId`: This is the name of your project. This needs to be unique within the groupId you provided. This value will also not change over time. Ex: `helloworld`
-* `version`: Represents the version of your application and usually done in an X.Y.Z type format. Version will change over time if your project goes through several releases and updates. You will also often see the word SNAPSHOT in the version property. This is explained below.
-
-Additionally, you must define the version number of Maven's Project Object Model that you want to use. This lets Maven know how to parse your pom.xml. For our examples this properts, `modelVersion`, will always be `4.0.0`.
-
-### Snapshot versus Release
+The simplest way to create a Maven project is to create a new directory and create a `pom.xml` inside of it. Once you've determined the dependencies and plugins you want to use, you'd add them to the POM.
 
 <!-- PAGE BREAK -->
 
 ### Create a Simple Maven Project
 
-To create a simple Maven project with the artifactId `hello`, do this:
+To create a simple Maven project named `hello`, do this:
 
     prompt> mkdir hello
     prompt> cd hello
 
-In your new directory create the file `pom.xml` with the following contents:
+In your new `hello` directory create the file `pom.xml` with the following contents:
 
     <project>
       <modelVersion>4.0.0</modelVersion>
@@ -293,6 +304,29 @@ In your new directory create the file `pom.xml` with the following contents:
       <artifactId>hello</artifactId>
       <version>1.0.-SNAPSHOT</version>
     </project>
+
+To view the effective POM (or "super POM") for your project, use the `effective-pom` goal from the `help` plugin:
+
+    prompt> mvn help:effective-pom
+	...
+	Effective POMs, after inheritance, interpolation, and profiles are applied:
+	...
+	<project xmlns="http://maven.apache.org/POM/4.0.0" ... >
+	  <modelVersion>4.0.0</modelVersion>
+	  <groupId>com.example</groupId>
+	  <artifactId>hello2</artifactId>
+	  <version>1.0-SNAPSHOT</version>
+	  <repositories>
+	    <repository>
+	      <snapshots>
+	        <enabled>false</enabled>
+	      </snapshots>
+	      <id>central</id>
+	      <name>Maven Repository Switchboard</name>
+	      <url>http://repo1.maven.org/maven2</url>
+	    </repository>
+	  </repositories>
+	...lots more...
 
 <!-- PAGE BREAK -->
 
@@ -321,12 +355,12 @@ You can use the `generate` goal in Maven's `archetype` plugin to generate a new 
 	6: 1.1
 	Choose a number: 6: 6
 	Define value for property 'groupId': : com.example
-	Define value for property 'artifactId': : hello
+	Define value for property 'artifactId': : hello2
 	Define value for property 'version': 1.0-SNAPSHOT: 1.0-SNAPSHOT
 	Define value for property 'package': com.example: 
 	Confirm properties configuration:
 	groupId: com.example
-	artifactId: hello
+	artifactId: hello2
 	version: 1.0-SNAPSHOT
 	package: com.example
 
@@ -334,11 +368,14 @@ You can use the `generate` goal in Maven's `archetype` plugin to generate a new 
 
 If you already know the archetype you want to use, you can provide all the information on the command-line:
 
-    prompt> $ mvn archetype:generate -DgroupId=com.example -DartifactId=hello2 -Dversion=1.0-SNAPSHOT -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+    prompt> $ mvn archetype:generate -DgroupId=com.example \
+	  -DartifactId=hello3 -Dversion=1.0-SNAPSHOT \
+	  -DarchetypeArtifactId=maven-archetype-quickstart \
+	  -DinteractiveMode=false
 	[INFO] Scanning for projects...
 	[INFO] Searching repository for plugin with prefix: 'archetype'.
 	...
-	[INFO] project created from Old (1.x) Archetype in dir: /Users/brian/work/projects/hello2
+	[INFO] project created from Old (1.x) Archetype in dir: /Users/brian/work/projects/hello3
 
 <!-- PAGE BREAK -->
 
@@ -474,7 +511,7 @@ Repositories are where Maven looks to get plugins and dependencies from.
 
 The first place Maven looks is in your Local Repository. By default this is in the directory `~/.m2/repository`.
 
-If you haven't set up your own repository (we haven't done this yet) the next place Maven will look is the Central Maven Repository. This is located at ???. If Maven finds the artifact there it will download it and put it in your Local Repository for future usage.
+If you haven't set up your own repository (which we haven't, yet) the next place Maven will look is the Central Maven Repository. This is located at ???. If Maven finds the artifact there it will download it and put it in your Local Repository for future usage.
 
 Once you've set up your own repository or have found another one you want to use, you'll configure Maven to search those repositories for all or a subset of artifacts.
 
