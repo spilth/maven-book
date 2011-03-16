@@ -2,11 +2,21 @@
 
 Maven is a tool for building and managing Java applications. Instead of spending time configuring and describing each step of your build processes, Maven uses standard directories and settings  allowing you to concentrate on writing code instead of managing your build process.
 
-It provides a mechanism for defining your project's Dependencies and lets you configure if they are needed at compilation, testing or run time. If the libraries have dependencies themselves, Maven knows to also download these transitive dependencies for your project.
+Although it's not required, you generally start a Maven project by using an Archetype. Archetypes are like templates for a Maven project. They supply a starting point for common project layouts and dependencies so you don't have to start for scratch.
 
-A large number of Plugins are available to use for special building, reporting and other tasks. These Plugins (as well as your Dependencies) are retrieved from a central Repository as needed, making the initial download and install of Maven very light. Downloaded artifacts are stored in a Local Repository on your computer so they are available for future use. Development teams can set up a Proxy Repository on their local network, bringing often used artifacts closer and saving you bandwidth usage and download time.
+The basis of any Maven project is the Project Object Model (POM) which is represented by the file `pom.xml` in the root of your project. You define Dependencies which specify other Maven projects and and components you may need when compiling, testing, running or delivering your app. You can incorporate Plugins which provide Goals that accomplish tasks for building and reporting about your project.
 
-Several hundred different Archetypes give you a starting point for your project, setting up common Dependencies and build processes. You can also use your Local and Proxy Repositories to install 3rd party dependencies that are not available in one of the popular public ones.
+Repositories are structured collections of Artifacts - the Archetypes, Plugins and Dependencies you need. They can be Maven's own central repository, a third-party repository, one your company sets up or your local filesystem.
+
+Life Cycles contain Phases which define ordered steps used to clean, build and document your project.  Packaging defines how your artifact will be delivered. It could be a JAR, WAR, EAR or several other types. The packaging you choose influences what Plugin Goals are associated with each Lifecycle Phase.
+
+The output of your Maven Project is an Artifact which could be an application, a library, your own Plugin or even a custom Archetype to generate other projects.
+
+A diagram of these various concepts and their relationships can be see in Figure 1 on the next page.
+
+![Figure 1: Maven Concepts](concepts.png "Maven Concepts")
+
+<!-- PAGE BREAK -->
 
 ## Who Is This Book For?
 
@@ -358,7 +368,7 @@ You can request multiple phases or goals be preformed by separating them on the 
 
 By using the help plugin to describe a Phase, you can see which Plugin Goals are associated with each Phase. They will be in the form `groupId:artifactId:goal`
 
-![Figure 1: Lifecycle Phases](lifecycle-phases.png "Lifecycle Phases")
+![Figure 2: Lifecycle Phases](lifecycle-phases.png "Lifecycle Phases")
 
 You can provide multiple goals/phases on the command line:
     mvn clean test
@@ -470,7 +480,7 @@ Once you've set up your own repository or have found another one you want to use
 
 These various repositories are shown in the diagram below.
 
-![Figure 2: Maven Repositories](repositories.png "Maven Repositories")
+![Figure 3: Maven Repositories](repositories.png "Maven Repositories")
 
 <!-- PAGE BREAK -->
 
