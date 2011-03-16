@@ -290,9 +290,9 @@ In your new directory create the file `pom.xml` with the following contents:
 
 Java projects come in a number of common flavors: a simple command-line application, a web application for Tomcat, AppFuse applications and countless more. These applications often have the same folder structure,  dependencies and build process. For a company with several of these types of applications the process of setting up the structure, dependencies and build process for these kinds of projects can become quite tedious. It also allows for inconsistency if this setup relies on a manual process by error-prone humans.
 
-Maven removes the tedium and inconsistencies with a concept called Archetypes. Archetypes can be thought of as templates for common application types. They define where source code and resources are stored, the process to compile and test code and any additional tasks you may need to perform. There is even an archetype to create additional archetypes!
+Maven removes the tedium and inconsistencies with a concept called Archetypes. Archetypes can be thought of as templates for common application types. They define where source code and resources are stored, the process to compile and test code, dependencies, plugins and any additional information and tasks you may need to perform. There is even an archetype to create your own archetype!
 
-You provide the archetype with your groupId, artifactId and version and it generates a POM file for you, along with its defined folder structure.
+You can use the `generate` goal in Maven's `archetype` plugin to generate a new project from an archetype.  You provide the archetype with your groupId, artifactId and version and it generates a POM file for you, along with its defined folder structure.
 
 <!-- PAGE BREAK -->
 
@@ -625,6 +625,8 @@ The first step in setting up dependencies for your project is identifying wether
 
 Once you've located your dependency, it's time to configure your project to use it.
 
+### Dependency Scope
+
 <!-- PAGE BREAK -->
 
 ### Add a Depedency to your Project
@@ -673,8 +675,6 @@ Wether you are installing the dependency locally or to a shared repository you'r
 * `version`:
 * `packaging`:
 * `file`:
-
-### Dependency Scope
 
 <!-- PAGE BREAK -->
 
@@ -841,7 +841,7 @@ To create a Maven project for your plugin, use the `maven-archetype-mojo` archet
 
 # Glossary
 
-* Archetype
+* Archetype: A template for a Maven project
 * Archiva: Repository server software created by Apache.
 * Artifact ID: An ID which unique indentifies a project within a Group ID.
 * Command
