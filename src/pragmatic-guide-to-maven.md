@@ -14,7 +14,7 @@ The output of your Maven Project is an Artifact which could be an application, a
 
 A diagram of these various concepts and their relationships can be see in Figure 1 on the next page.
 
-![Figure 1: Maven Concepts](concepts.png "Maven Concepts")
+![Figure 1: Maven Concepts](../src/concepts.png "Maven Concepts")
 
 <!-- PAGE BREAK -->
 
@@ -411,7 +411,7 @@ You can request multiple phases or goals be preformed by separating them on the 
 
 By using the help plugin to describe a Phase, you can see which Plugin Goals are associated with each Phase. They will be in the form `groupId:artifactId:goal`
 
-![Figure 2: Lifecycle Phases](lifecycle-phases.png "Lifecycle Phases")
+![Figure 2: Lifecycle Phases](../src/lifecycle-phases.png "Lifecycle Phases")
 
 You can provide multiple goals/phases on the command line:
     mvn clean test
@@ -513,40 +513,37 @@ You can configure projects to look in additional Repositories including 3rd Part
 
 The various types of repositories mentioned above are shown in the diagram below.
 
-![Figure 3: Maven Repositories](repositories.png "Maven Repositories")
+![Figure 3: Maven Repositories](../src/repositories.png "Maven Repositories")
 
 <!-- PAGE BREAK -->
 
 <!-- PAGE BREAK -->
 
-## Task X: Configuring Additional Repositories
+## Task X: Configuring Repository Mirrors
+
 
 <!-- PAGE BREAK -->
 
 	<settings>
-	  ...non-mirrors entries...
-	
+	  ...other stuff...	
 	  <mirrors>
 	    <mirror>
-	      <id>company-repository</id>
-	      <name>Example.com's Maven Repository</name>
-	      <url>http://repository.example.com/???</url>
+	      <id>ibiblio</id>
+	      <name>ibiblio Mirror of Central</name>
+	      <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
 	      <mirrorOf>central</mirrorOf>
 	    </mirror>
 	  </mirrors>
-
-	  ...more non-mirrors entries...
+	  ...other stuff...
 	</settings>
 
 <!-- PAGE BREAK -->
 
-## Task X: Installing and Running Archiva as a Standalone Server
+## Task X: Installing and Running Archiva
 
-Archiva 1.3.4 Standalone
+Archiva is a free Repository Manager created by the Apache Group. It is available in two forms: a standalone application or as a WAR that can deployed to Tomcat. Once you have Archiva up and running either using it is essentially the same regardless of which form you are using. To simplify the examples and save space we will use the standalone release.
 
-http://archiva.apache.org/
-
-Jetty
+You can download archiva from `http://archiva.apache.org/`. Be sure to get the standalone version. For these example we are using version 1.3.4.
 
 <!-- PAGE BREAK -->
 
@@ -554,23 +551,19 @@ Jetty
     prompt> mv apache-archiva-1.3.4 /Users/brian/Applications/
     Archive:  apache-archiva-1.3.4-bin.zip
 	   creating: apache-archiva-1.3.4/
-	   creating: apache-archiva-1.3.4/conf/
-	  inflating: apache-archiva-1.3.4/conf/archiva.xml
     ...
 
-By default Archiva will listen on port 8080. If you want to change the port number Jetty is listening on, edit `conf/jety.xml` and change the following line.
+By default Archiva will listen on port 8080. If you want to change the port number Jetty is listening on, edit `conf/jety.xml` and change the following line before starting it up.
 
     <Set name="port"><SystemProperty name="jetty.port" default="8080"/></Set>
 
-To start up Archiva:
+To start Archiva:
 
     prompt> cd /Users/brian/Applications/apache-archiva-1.3.4
     prompt>  ./bin/archiva console
 	Running Apache Archiva...
-	wrapper  | --> Wrapper Started as Console
-	wrapper  | Launching a JVM...
 
-You should now be able to access Archiva via `http://localhost:8080/archiva`. Supply a full name, email address and password for the `admin` user and you should be set.
+You should now be able to access Archiva via `http://localhost:8080/archiva`. Supply a full name, email address and password for the `admin` user and you should be all set.
 
 <!-- PAGE BREAK -->
 
@@ -581,18 +574,28 @@ Archiva is pre-configured with two repositories already set up. There is **Archi
 * `http://localhost:8080/archiva/repository/internal/`
 * `http://localhost:8080/archiva/repository/snapshots/`
 
-It is also pre-configured to mirror two public repositories: **central** and **java.net**. The `internal' repository is set up to mirror these two repositories. This means if you point to your Archiva instance as a mirror, it will retrieve artifacts from those repositories and then cache them for future retrieval. This can be a big bandwidth and time saver if you have a number of developers using Maven at your company. For sole developers the local repository should be fine.
+It is also pre-configured to proxy two public repositories: **central** and **java.net**. The `internal' repository is set up to proxy these two repositories. This means if you point to your Archiva instance as a mirror, it will retrieve artifacts from those repositories and then cache them for future retrieval. This can be a big bandwidth and time saver if you have a number of developers using Maven at your company. For sole developers the local repository should be fine.
+
+* id: This should be a unique identifier. If you need to provide authentication information for a mirror you will need to reference this id. 
+* name:
+* url:
+* mirrorOf:
 
 <!-- PAGE BREAK -->
 
 ### Configure Maven to use Archiva as a Mirror
 
+Edit `~/.m2/settings.xml` and add the following:
+
     <settings>
+      ...other stuff...
       <mirrors>
-        <id>local-archiva</id>
-        <name>Mirror Name</name>
-        <url>http://localhost/archiva/</url>
-        <mirrorOf>central</mirrorOf>
+        <mirror>
+          <id>archiva</id>
+          <name>Archiva</name>
+          <url>http://localhost/archiva/</url>
+          <mirrorOf>*</mirrorOf>
+        </mirror>
       </mirrors>
     </settings>
 
