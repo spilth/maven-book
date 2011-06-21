@@ -78,7 +78,7 @@ Maven requires its main script `mvn` being in your execution path, an environmen
 
 <!-- PAGE BREAK -->
 
-### Install Maven 2.2.1 on OS X
+### Install Maven 3.0.3 on OS X
 
 After downloading Maven 3.0.3 from http://maven.apache.org/download.html
 
