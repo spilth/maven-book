@@ -1,0 +1,3 @@
+gem 'htmldoc'
+gem 'rdiscount'
+

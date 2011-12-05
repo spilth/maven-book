@@ -1,0 +1,11 @@
+GEM
+  specs:
+    htmldoc (0.2.3)
+    rdiscount (1.6.8)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  htmldoc
+  rdiscount
