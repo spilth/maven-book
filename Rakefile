@@ -3,7 +3,11 @@ require 'htmldoc'
 
 task :default => :generate_pdf
 
-task :generate_html do
+task :init do
+  Dir::mkdir("target") unless File.exists?("target")
+end
+
+task :generate_html => :init do
   puts "Generating HTML from Markdown..."
   file = File.open("src/pragmatic-guide-to-maven.md", "rb")
   contents = file.read

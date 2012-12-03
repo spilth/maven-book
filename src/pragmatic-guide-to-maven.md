@@ -226,7 +226,7 @@ Additional detail can be requested by setting the `detail` property to `true`.
 	      The archetype's artifactId.
 	...
 
-## Task 2: Configuring Maven
+## Task 4: Configuring Maven
 
 Naturally, Maven works out of the box with zero configuration.
 
