@@ -1,5 +1,5 @@
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     htmldoc (0.2.3)
     rdiscount (1.6.8)
